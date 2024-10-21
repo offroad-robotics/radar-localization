@@ -1,0 +1,2 @@
+float32 lat_dist
+float32 long_dist

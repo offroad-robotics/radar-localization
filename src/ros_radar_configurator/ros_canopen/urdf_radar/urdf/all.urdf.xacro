@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+
+<!-- Additional custom configuration file for Husky, to be included in husky.urdf.xacro
+    from husky_config (originally taken and subsequently modified from husky_description) -->
+
+<robot name="husky" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- ****************** GEN A ****************** -->
+
+<!-- <link name="sick_front_bracket"/>
+<joint name="sick_front_bracket_joint" type="fixed">
+  <origin xyz="0.475 -0.0835 0.308" rpy="0 0 -0.0261799388" />
+  <parent link="base_link" />
+  <child link="sick_front_bracket" />
+</joint>
+
+<link name="sick_front_link"/>
+<joint name="sick_front_joint" type="fixed">
+  <origin xyz="0 0 -0.038" rpy="3.14159265359 0 0"/>
+  <parent link="sick_front_bracket" />
+  <child link="sick_front_link" />
+</joint>
+
+<link name="sick_back_link"/>
+<joint name="sick_back_joint" type="fixed">
+  <origin xyz="-0.68 0 0.01" rpy="0 0 3.14159265359"/>
+  <parent link="sick_front_link" />
+  <child link="sick_back_link" />
+</joint>
+
+<link name="ball_joint"/>
+<joint name="ball_joint_joint" type="fixed">
+  <origin xyz="0.411 0.062 0.302" rpy="-1.57079632679 1.57079632679 0"/>
+  <parent link="base_link" />
+  <child link="ball_joint" />
+</joint>
+
+<link name="swissranger"/>
+<joint name="swissranger_joint" type="fixed">
+  <origin xyz="0.095 0.037 0" rpy="0 -0.383972435 0"/>
+  <parent link="ball_joint" />
+  <child link="swissranger" />
+</joint>
+
+<link name="gx3_imu_link"/>
+<joint name="gx3_imu_joint" type="fixed">
+  <origin xyz="0.140 0.267 0.238" rpy="0 3.14159 1.5708" />
+  <parent link="base_link" />
+  <child link="gx3_imu_link" />
+</joint>
+
+<link name="hdl32e_lidar_link"/>
+<joint name="hdl32e_lidar_joint" type="fixed">
+  <origin xyz="0.1775 0.254 0.765" rpy="1.5708 0 1.5708" />
+  <parent link="base_link" />
+  <child link="hdl32e_lidar_link" />
+</joint> -->
+
+<!--fix this exact transform for radar -->
+<link name="radar">
+  <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <box size="0 0.5 0"/>
+      </geometry>
+      <material name="blue">
+          <color rgba="0 0 1 1"/>
+      </material>
+  </visual>
+  <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <box size="0.05 0.1 0.1"/>
+      </geometry>
+  </collision>
+</link>
+
+
+<joint name="radar_base_link_joint" type="fixed">
+  <origin xyz="0.3 0.1 0.2" rpy="0 0 0" />
+  <parent link="base_link"/>
+  <child link="radar"/>
+</joint>
+
+
+<!-- ****************** GEN B ****************** -->
+
+<!-- Note that the VLP16 may be commented it out as it may be included in husky.urdf.xacro in a standalone .urdf.xacro file -->
+<!-- <link name="vlp16_lidar_link"/>
+<joint name="vlp16_lidar_joint" type="fixed">
+  <origin xyz="0.0117 0 0.7192" rpy="0 0 0" />
+  <parent link="base_link" />
+  <child link="vlp16_lidar_link" />
+</joint> -->
+
+<link name="gx5_imu_link"/>
+<joint name="gx5_imu_joint" type="fixed">
+  <origin xyz="0.01174 -0.1241 0.559" rpy="3.14159 0 -1.5708" />
+  <parent link="base_link" />
+  <child link="gx5_imu_link" />
+</joint>
+
+
+</robot>

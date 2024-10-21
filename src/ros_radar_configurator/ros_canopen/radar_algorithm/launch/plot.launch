@@ -1,0 +1,21 @@
+<!-- Launch the pyplot path follow node and save the data somewhere -->
+
+<launch>
+    <node pkg="unicycle_pathfollowing" type="plotter_results.py" name="pyplot_pathfollow" output="screen" >
+    <!-- ************ Define parameters for plotting and saving in Python ************-->
+        <!-- Set switch to turn data saving on or off (True/False) -->
+        <param name="save_data_switch" value="True" />
+        <!-- Set directory to save files to -->
+        <param name="directory" value="/home/offroad/Datasets" />
+        <!-- If we are saving, what kind of path are we following -->
+        <param name="path_type" value="loop" />
+
+        <!-- Set switch to turn plotting on or off (True/False) -->
+        <param name="plot_data_switch" value="True" />
+
+        <!-- Set limits for plots -->
+        <param name="el_lim" value="1" />
+        <param name="eh_lim" value="1" />
+
+    </node>
+</launch>

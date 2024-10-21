@@ -1,0 +1,103 @@
+<launch>
+    <!-- ************ Create transform for radar unit ************
+    <node pkg="tf2_ros" type="static_transform_publisher" name="husky_b1/radar_tf_broadcaster" arg="0.367 
+    0.267 0.238 0.78539816 0 0 husky_b1_tf/base_link husky_b1_tf/radar_link" /> -->
+    <!-- ************ pose_to_odom tranformer for Vicon ************ -->
+    <!-- <node pkg="pose_to_odom" type="pose_to_odom.py" name="pose_to_odom_transformer" output="screen" >
+        <param name="pose" value="/vrpn_client_node/husky_old/pose" />
+        <param name="twist" value="/vrpn_client_node/husky_old/twist" />
+    </node> -->
+    <!-- ************ Start husky path following controller ************ -->
+    <node pkg="socketcan_bridge" type="pathfollow_controller.py" name="pathfollow" output="screen" >
+        <!-- Define parameters for controller -->
+        <!-- Declare rate at which main callback will loop -->
+        <param name="rate" value="0.2" />
+
+        <!-- Autotrigger setting to make path following code start automatically -->
+        <param name="autotrigger" value="False" />
+
+        <!-- Set to True to use joystick as deadman pendant -->
+        <param name="use_estop" value="True" />
+
+        <!-- Select the vehicle we are using (husky or rtv) -->
+        <param name="vehicle" value="husky" />
+
+        <!-- Topics names for husky -->
+        <param name="husky_estop" value="husky_a1/e_stop" />
+        <param name="desired_path" value="filteredPath" />
+        <param name="joy" value="husky_a1/joy" />
+        <param name="start_trigger" value="start_trigger" />
+        <param name="stop_topic" value="stop_trigger" />
+
+        <!-- Vehicle pose from simulation -->
+        <!-- <param name="estimate" value="unicycle_sim/odometry" /> -->
+        <param name="estimate" value='/husky_a1/odometry/filtered' />
+        
+        <!-- For command velocity topic -->
+        <param name="cmdvel" value="husky_a1/cmd_vel" />
+        <!-- <param name="cmdvel" value="husky_velocity_controller/cmd_vel" /> -->
+
+        <!-- Constant velocity to send to the velocity controller const was at 0.9 -->
+        <param name="const_vel" value="0.5" />
+        <param name="v_min" value="0.25" />
+
+        <!-- Select Controller
+        Copy and paste the following into value below: fbl, mpcfbl or nmpc -->
+        <param name="controller_selector" value="mpcfbl" />
+        
+        <!-- Controller gains for FBL -->
+        <!-- Best gains: omega=1.5,zeta=1.0 or omega=1.25,zeta=1.5 -->
+        <param name="omega_cl" value="1.5" />
+        <param name="zeta" value="1.0" />
+        <!-- Lookahead Parameters for FBL -->
+        <param name="enable_lookahead" value="False" />
+        <param name="path_point_spacing" value="0.05" />
+        <param name="t_lookahead" value="0.4" />
+
+        <!-- Controller gains for MPC -->
+        <!-- Select if the MPC controller is using full state or not -->
+        <param name="fullstate_mpc" value="True" />
+
+        <!-- Choose prediction horizon -->
+        <param name="lookahead" value="20" />
+
+        <!-- For MPC+FBL Path Following Controller -->
+        <!-- Best gains for opt 1: R=6, Q=1, p=20 -->
+        <!-- Best gains for opt 2 - 0.5 m/s: R=1, Q=1, p=20 -->
+        <!-- Best gains for opt 2 - 0.9 m/s: R=1, Q=5, p=10 -->
+        <param name="k_R_fs" value="10" />
+        <param name="k_Q_fs1" value="1" />
+        <param name="k_Q_fs2" value="1" />
+
+        <!-- For NMPC Path Following Controller-->
+        <!-- Best gains for NMPC: i=4, R=5, Q=1, p=20 -->
+        <param name="max_iter" value="4" />
+        <param name="k_R_nmpc" value="5" />
+        <param name="k_Q_nmpc" value="1" />
+        <param name="thresh" value="0.01" />
+        
+    </node>
+
+
+    <node pkg="unicycle_pathfollowing" type="plotter_results.py" name="pathfollow_plot_data" output="screen" > -->
+    <!-- ************ Define parameters for plotting and saving in Python ************-->
+        <!-- Set switch to turn data saving on or off (True/False) -->
+        <param name="save_data_switch" value="True" />
+
+        <!-- Set directory to save files to -->        
+        <param name="directory" value="path_csv_logs/" />
+
+        <!-- If we are saving, what kind of path are we following -->
+        <param name="path_type" value="line" />
+
+        <!-- Set switch to turn plotting on or off (True/False) -->
+        <param name="plot_data_switch" value="True" />
+
+        <!-- Set limits for plots -->
+        <param name="el_lim" value="1" />
+        <param name="eh_lim" value="1" />
+
+    </node>
+
+
+</launch>

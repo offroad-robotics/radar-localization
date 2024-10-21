@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="husky_name" default="husky_a1"/>
+    <arg name="tfpre" default=""/>
+    <arg name="connect_to_husky_base" default="true"/>
+
+   <arg name="gui" default="true" />
+   <arg name="rvizconfig" default="$(find radar_rviz)/rviz/April13.rviz" />
+
+<!-- Radar communication nodes -->
+    <node name="radar_pointcloud" pkg="radar_algorithm" type="radar_pointcloud.py" output="screen" />
+    
+   <!-- custom listener employs dbscan on the noisy pcl-->
+
+    <node name="custom_listener" pkg="radar_algorithm" type="dbscan.py" output="screen" />
+    
+
+<!-- create path from odometry-->
+    <!-- <node name="odom_to_path" pkg="socketcan_bridge" type="odom_to_path.py" output="screen" /> -->
+
+<!-- Median calculator for median filter-->
+    <!-- <node name="median_calculator" pkg="socketcan_bridge" type="median_calculator.py" output="screen" /> -->
+
+
+
+<!-- Radar model -->
+
+    <!-- <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" /> -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find urdf_radar)/urdf/husky.urdf.xacro'
+    husky_name:=$(arg husky_name)
+    tfpre:=$(arg tfpre)"
+    />
+    <param name="use_gui" value="$(arg gui)"/>
+
+    <!--<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> -->
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_radar" args="0.3 0.1 0.38 0 0 0 base_link /radar 10" />
+
+<!-- Radar rviz -->
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" /> 
+
+<!-- Kalman filter -->
+
+    <node name="multi_object_tracker" pkg="radar_algorithm" type="kalman_filter.py"  output="screen" />
+    <!-- <node name="multi_object_tracker" pkg="socketcan_bridge" type="MOT_unicycle.py"  output="screen" /> -->
+
+<!-- Point Cloud Visualizer for Radar output, and Kalman Filter Output to show impact of KF-->
+    <node name="radar_image_vis" pkg="radar_algorithm" type="noisy_pcl_visualizer.py"  output="screen" />
+
+    <node name="filtered_pcl_vis" pkg="radar_algorithm" type="smooth_pcl_visualizer.py"  output="screen" />
+
+    <node name="dbscan_vis" pkg="radar_algorithm" type="dbscan_vis.py"  output="screen" />
+
+
+<!-- Path Logger -->
+    <!-- <node name="path_logger" pkg="socketcan_bridge" type="path_logger_sys.py" output="screen" /> -->
+    
+
+<!-- Covariance Plotter -->
+
+    <!-- <node name="covariance_plotter" pkg="socketcan_bridge" type="cov_plot.py"  output="screen" /> -->
+    
+</launch>
